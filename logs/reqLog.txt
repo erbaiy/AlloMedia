@@ -180,3 +180,5 @@
 20240926	18:06:44	eded13d6-3c07-448a-a709-ea03207b6f9b	POST	undefined	/auth
 20240926	18:06:57	fba6c288-d06e-4401-bb8f-538353f21641	GET	undefined	/refresh
 20240926	18:06:58	06edeb86-82fc-482e-98e7-5942a973051f	GET	undefined	/refresh
+20240926	18:25:35	c20a6dd5-72e7-441b-b1e8-43692249f90c	GET	undefined	/
+20240926	18:25:35	eb86bc6b-3ed7-451c-8907-97fe1b8ca2ac	GET	undefined	/favicon.ico

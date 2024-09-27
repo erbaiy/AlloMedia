@@ -7,6 +7,7 @@ const login = async (req, res) => {
 
         // Call the service layer function to handle login
         const { accessToken, refreshToken, user } = await handleLogin(email, password);
+       
 
         // Set the refresh token in a secure, HTTP-only cookie
         res.cookie('jwt', refreshToken, {

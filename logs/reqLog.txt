@@ -182,3 +182,17 @@
 20240926	18:06:58	06edeb86-82fc-482e-98e7-5942a973051f	GET	undefined	/refresh
 20240926	18:25:35	c20a6dd5-72e7-441b-b1e8-43692249f90c	GET	undefined	/
 20240926	18:25:35	eb86bc6b-3ed7-451c-8907-97fe1b8ca2ac	GET	undefined	/favicon.ico
+20240926	22:44:54	b473c216-3f80-4985-af80-d397c7e1c4fb	GET	undefined	/refresh
+20240926	22:44:55	69e989d6-d5d3-4bdf-8c95-ba4719049a69	GET	undefined	/refresh
+20240926	22:45:10	c6fe637d-8db3-4e23-9d55-3ea8ca0a2e97	GET	undefined	/employees
+20240926	22:45:11	8e1fd8bf-2d50-4a91-94d0-0d5a90670c34	GET	undefined	/employees
+20240926	22:45:16	8edb78bb-c66f-4da4-bf07-71e66e8eb3fb	POST	undefined	/auth
+20240926	22:45:33	2fef3358-9e04-4649-81ae-457587af3e39	GET	undefined	/employees
+20240926	22:45:37	fc82b810-14b2-4ec4-a951-be287dac0ef8	GET	undefined	/employees
+20240926	22:45:46	bb71de7f-c5d8-4786-8f55-13651c09b76c	GET	undefined	/employees
+20240927	00:28:38	f212abab-1e84-4717-99cb-a3f37656cf67	POST	undefined	/auth
+20240927	00:29:00	9f85a9d6-0537-468f-b92d-9f0b937332d7	POST	undefined	/auth
+20240927	00:29:03	546eb08f-c9a1-46e5-bc61-a3eb01798731	POST	undefined	/auth
+20240927	00:29:51	54598505-ee67-45fb-b316-96d757c5b3a3	POST	undefined	/auth
+20240927	00:31:16	514725ce-164a-4212-9615-fed749fe48dc	POST	undefined	/auth
+20240927	00:48:22	05e3a133-1988-4560-8aed-2e97a14b9236	POST	undefined	/auth

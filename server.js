@@ -2,12 +2,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
-const corsOptions = require('./config/corsOptions');
-const { logger } = require('./middleware/logEvents');
-const errorHandler = require('./middleware/errorHandler');
-const verifyJWT = require('./middleware/verifyJWT');
+const corsOptions = require('./app/config/corsOptions');
+const { logger } = require('./app/middleware/logEvents');
+const errorHandler = require('./app/middleware/errorHandler');
+const verifyJWT = require('./app/middleware/verifyJWT');
 const cookieParser = require('cookie-parser');
-const credentials = require('./middleware/credentials');
+const credentials = require('./app/middleware/credentials');
 const connectDB=require('./db/dbconnect')
 const PORT = process.env.PORT || 3500;
 
@@ -32,21 +32,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 //middleware for cookies
-// app.use(cookieParser());
+app.use(cookieParser());
 
 //serve static files
 
 // routes
-app.use('/register', require('./routes/register'));
-app.use('/auth', require('./routes/auth'));
-app.use('/refresh', require('./routes/refresh'));
-app.use('/logout', require('./routes/logout'));
+app.use('/register', require('./app/routes/register'));
+app.use('/auth', require('./app/routes/auth'));
+app.use('/refresh', require('./app/routes/refresh'));
+app.use('/logout', require('./app/routes/logout'));
 app.get('/',(req,res)=>{
     res.send('welcome');
 })
 
 app.use(verifyJWT);
-app.use('/employees', require('./routes/api/employees'));
+// app.use('/employees', require('./app/routes/api/employees'));
 
 app.all('*', (req, res) => {
     res.status(404);

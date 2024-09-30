@@ -163,4 +163,4 @@ For deployment instructions, please refer to our [Deployment Guide](link-to-depl
 
 ---
 
-For more detailed information or if you encounter any issues, please refer to our [Full Documentation](check my protfolio) or open an issue on this repository.
+For more detailed information or if you encounter any issues, please refer to our [Full Documentation](ckeckmyporfolio) or open an issue on this repository.

@@ -12,6 +12,7 @@ const connectDB=require('./db/dbconnect')
 const PORT = process.env.PORT || 3500;
 
 
+
 // Connect to MongoDB
 connectDB();
 // custom middleware logger
@@ -46,7 +47,9 @@ app.get('/',(req,res)=>{
 })
 
 app.use(verifyJWT);
-// app.use('/employees', require('./app/routes/api/employees'));
+app.get('/home', (req, res) => {
+    res.send('Home page');
+}); 
 
 app.all('*', (req, res) => {
     res.status(404);

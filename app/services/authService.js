@@ -5,8 +5,9 @@ const Role = require('../model/roleModel');
 const bcrypt = require('bcrypt');
 
 const crypto = require('crypto');
+const { tr } = require('date-fns/locale');
 
-const { sendOtpEmail } = require('./emailService');
+// const { sendOtpEmail } = require('./emailService');
 
 
 // Function to register a new user
@@ -45,48 +46,6 @@ const generateVerificationToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
 };
 
-// const handleLogin = async (email, password) => {
-//   if (!email || !password) {
-//       throw new Error('Email and password are required.');
-//   }
-
-//   const foundUser = await User.findOne({ email });
-//   if (!foundUser) {
-//       throw new Error('Unauthorized'); // User not found
-//   }
-
-//   // Compare passwords
-//   const isMatch = await bcrypt.compare(password, foundUser.password);
-//   if (!isMatch) {
-//       throw new Error('Unauthorized'); // Password doesn't match
-//   }
-
-//   // Generate Access and Refresh tokens
-//   const accessToken = jwt.sign(
-//       { username: foundUser.username, userId: foundUser._id },
-//       process.env.ACCESS_TOKEN_SECRET,
-//       { expiresIn: '30s' } // Short expiration for access token
-//   );
-
-//   const refreshToken = jwt.sign(
-//       { username: foundUser.username, userId: foundUser._id },
-//       process.env.REFRESH_TOKEN_SECRET,
-//       { expiresIn: '1d' } // Longer expiration for refresh token
-//   );
-
-//   // Save refresh token in user database
-//   foundUser.refreshToken = refreshToken;
-//   await foundUser.save();
-
-//   // Return the tokens and the user data
-//   return { accessToken, refreshToken, user: foundUser };
-// };
-
-
-
-// Generate OTP and store it in the user's record
-
-// Handle login
 
 
 
@@ -94,37 +53,20 @@ const handleLogin = async (email, password) => {
     if (!email || !password) {
         throw new Error('Email and password are required.');
     }
-
     const foundUser = await User.findOne({ email });
-    if (!foundUser) {
+
+    if (!foundUser || !foundUser.isVerified === true) {
         throw new Error('Unauthorized'); // User not found
     }
-
     // Compare passwords
     const isMatch = await bcrypt.compare(password, foundUser.password);
     if (!isMatch) {
         throw new Error('Unauthorized'); // Password doesn't match
     }
-
-    // Generate Access and Refresh tokens
-    const accessToken = jwt.sign(
-        { username: foundUser.username, userId: foundUser._id },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '15m' } // Increased from 30s to 15m for better usability
-    );
-
-    const refreshToken = jwt.sign(
-        { username: foundUser.username, userId: foundUser._id },
-        process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: '1d' } // Increased from 1d to 7d
-    );
-
     // Save refresh token in the user database
-    foundUser.refreshToken = refreshToken;
     await foundUser.save();
-
     // Return the tokens and the user data
-    return { accessToken, refreshToken, user: foundUser };
+    return {user: foundUser };
 };
 
 const generateOtp = async (userId) => {
@@ -138,10 +80,7 @@ const generateOtp = async (userId) => {
   }
   user.otp = otp;
   user.otpExpiration = expirationTime;
-
-  
   await user.save();
-
   return otp;
 };
 

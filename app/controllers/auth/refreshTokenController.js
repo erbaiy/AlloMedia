@@ -1,5 +1,5 @@
 // refreshTokenController.js
-const User = require('../model/userModel');
+const User = require('../../model/userModel');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -12,10 +12,7 @@ const handleRefreshToken = async (req, res) => {
     const refreshToken = cookies.jwt;
 
     try {
-        // Find user with the given refresh token
-        const foundUser = await User.findOne({ refreshToken });
-        if (!foundUser) return res.sendStatus(403); // Forbidden, user not found or refresh token invalid
-
+     
         // Verify the refresh token
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
             // Check if the token is invalid or doesn't match the user's username

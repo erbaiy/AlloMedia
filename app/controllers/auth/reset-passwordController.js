@@ -1,32 +1,35 @@
 const jwt = require('jsonwebtoken');
 const User = require('../../model/userModel');
-const { sendOtpEmail } = require('../../services/emailService');
-const { generateOtp } = require('../../services/authService');
+const bcrypt = require('bcrypt');
 
 const rsetPassword = async (req, res) => {
     try {
-        const { email, otp, newPassword } = req.body; // OTP and newPassword should be in the body
-        const { token } = req.params; // Token from URL params (if needed for password reset)
+        const { newPassword } = req.body; // Le nouveau mot de passe depuis le corps de la requête
+        const { token } = req.params; // Token depuis les paramètres de l'URL
 
-        // Verify the JWT token from the reset link
+        // Vérifier et décoder le token JWT
         const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
         if (!tokenDecoded) {
             return res.status(400).send('Invalid or expired token');
-        }
+        }    
 
-        // Find the user by email or token
+        // Trouver l'utilisateur par email
         const user = await User.findOne({ email: tokenDecoded.email });
         if (!user) {
             return res.status(404).send('User not found');
         }
 
-        // Update the user's password
-        user.password = newPassword;
+        // update user password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
         await user.save();
-        
 
-        res.status(200).send('Password updated successfully');
+        // Envoyer une réponse de succès
+        return res.status(200).send('Password updated successfully');
     } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            return res.status(400).send('Token has expired');
+        }
         return res.status(400).json({ message: 'Error resetting password', error: error.message });
     }
 };

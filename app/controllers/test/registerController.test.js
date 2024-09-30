@@ -1,14 +1,12 @@
-
-// Import necessary libraries
+const register = require('../../controllers/auth/registerController'); // Adjust the path as needed
 const { registerUser, generateVerificationToken } = require('../../services/authService');
 const { sendVerificationEmail } = require('../../helpers/emailHelper');
-const register = require('../auth/registerController'); // Update the path as necessary
 
 // Mock the dependencies
+jest.mock('../../services/authService');
 jest.mock('../../helpers/emailHelper');
-jest.mock('../../services/authService.js');
 
-describe('User Registration Controller', () => {
+describe('register function', () => {
   let req, res;
 
   beforeEach(() => {
@@ -16,44 +14,62 @@ describe('User Registration Controller', () => {
       body: {
         username: 'testuser',
         password: 'testpassword',
-        email: 'testuser@example.com',
-        roles: ['user'], // Changed from ['/services/authService.js'] to ['user']
-      },
+        email: 'test@example.com',
+        roles: ['user']
+      }
     };
-
     res = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      json: jest.fn()
     };
   });
 
-  it('should register a new user, generate token, and send verification email', async () => {
-    // Mock the service and helper functions
-    const mockUser = { _id: 'user123', email: 'testuser@example.com' };
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should register a user successfully', async () => {
+    const mockUser = { _id: 'mockUserId', ...req.body };
+    const mockToken = 'mockVerificationToken';
+
     registerUser.mockResolvedValue(mockUser);
-    generateVerificationToken.mockReturnValue('verificationToken123');
+    generateVerificationToken.mockReturnValue(mockToken);
     sendVerificationEmail.mockResolvedValue();
 
-    // Call the controller
     await register(req, res);
 
-    // Assertions
-    expect(registerUser).toHaveBeenCalledWith('testuser', 'testpassword', 'testuser@example.com', ['user']);
+    expect(registerUser).toHaveBeenCalledWith(req.body.username, req.body.password, req.body.email, req.body.roles);
     expect(generateVerificationToken).toHaveBeenCalledWith(mockUser._id);
-    expect(sendVerificationEmail).toHaveBeenCalledWith('testuser@example.com', 'verificationToken123');
+    expect(sendVerificationEmail).toHaveBeenCalledWith(req.body.email, mockToken, 'verifyEmail');
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith({ message: 'User created successfully. Please verify your email.' });
   });
 
-  it('should handle errors and return a 400 status', async () => {
-    // Mock the service to throw an error
-    const errorMessage = 'Error registering user';
+  it('should handle registration error', async () => {
+    const errorMessage = 'Registration failed';
     registerUser.mockRejectedValue(new Error(errorMessage));
 
-    // Call the controller
     await register(req, res);
 
-    // Assertions
+    expect(registerUser).toHaveBeenCalledWith(req.body.username, req.body.password, req.body.email, req.body.roles);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Error registering user', error: errorMessage });
+  });
+
+  it('should handle verification email error', async () => {
+    const mockUser = { _id: 'mockUserId', ...req.body };
+    const mockToken = 'mockVerificationToken';
+    const errorMessage = 'Email sending failed';
+
+    registerUser.mockResolvedValue(mockUser);
+    generateVerificationToken.mockReturnValue(mockToken);
+    sendVerificationEmail.mockRejectedValue(new Error(errorMessage));
+
+    await register(req, res);
+
+    expect(registerUser).toHaveBeenCalledWith(req.body.username, req.body.password, req.body.email, req.body.roles);
+    expect(generateVerificationToken).toHaveBeenCalledWith(mockUser._id);
+    expect(sendVerificationEmail).toHaveBeenCalledWith(req.body.email, mockToken, 'verifyEmail');
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ message: 'Error registering user', error: errorMessage });
   });

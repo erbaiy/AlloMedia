@@ -1,18 +1,9 @@
-const { login } = require('../auth/loginController');
-const { handleLogin, generateOtp, validateOtp } = require('../../services/authService');
-const { sendOtpEmail } = require('../../services/emailService');
-const User = require('../../app/model/userModel');
-const bcrypt = require('bcrypt');
+const { login } = require('../../controllers/auth/loginController');
+const { handleLogin, generateOtp } = require('../../services/authService');
+const { sendVerificationEmail } = require('../../helpers/emailHelper');
 
-
-// Mock the required modules
-jest.mock('bcrypt', () => ({
-  compare: jest.fn((inputPassword, hashedPassword) => 
-    Promise.resolve(inputPassword === 'correctpassword'))
-}));
-jest.mock('../../services/authService');
-jest.mock('../../services/emailService');
-jest.mock('../../model/userModel');
+jest.mock('../../services/authService.js');
+jest.mock('../../helpers/emailHelper');
 
 describe('login function', () => {
   let req, res, mockUser;
@@ -40,26 +31,17 @@ describe('login function', () => {
   });
 
   test('should return 200 and send OTP when login is successful', async () => {
-    // Mock successful login
-    handleLogin.mockResolvedValue({
-      user: mockUser,
-      accessToken: 'mockAccessToken',
-      refreshToken: 'mockRefreshToken'
-    });
+    handleLogin.mockResolvedValue({ user: mockUser });
     generateOtp.mockResolvedValue('123456');
-    sendOtpEmail.mockResolvedValue();
+    sendVerificationEmail.mockResolvedValue(); // Mocking email sending
 
     await login(req, res);
 
     expect(handleLogin).toHaveBeenCalledWith('test@example.com', 'password123');
     expect(generateOtp).toHaveBeenCalledWith('user123');
-    expect(sendOtpEmail).toHaveBeenCalledWith('test@example.com', '123456');
-    expect(res.cookie).toHaveBeenCalledWith('jwt', 'mockRefreshToken', expect.any(Object));
+    expect(sendVerificationEmail).toHaveBeenCalledWith('test@example.com', '123456', 'loginOtp');
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({
-      message: 'OTP sent to your email. Please verify.',
-      accessToken: 'mockAccessToken'
-    });
+    expect(res.json).toHaveBeenCalledWith({ message: 'OTP sent to your email. Please verify.' });
   });
 
   test('should return 401 when credentials are invalid', async () => {
@@ -68,18 +50,6 @@ describe('login function', () => {
     await login(req, res);
 
     expect(handleLogin).toHaveBeenCalledWith('test@example.com', 'password123');
-    expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Invalid credentials' });
-    expect(res.status).toHaveBeenCalledWith(401);
-  });
-
-  test('should return 401 when password does not match', async () => {
-    req.body.password = 'wrongpassword';
-    handleLogin.mockRejectedValue(new Error('Unauthorized'));
-
-    await login(req, res);
-
-    expect(handleLogin).toHaveBeenCalledWith('test@example.com', 'wrongpassword');
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ message: 'Invalid credentials' });
   });

@@ -4,9 +4,8 @@ const bcrypt = require('bcrypt');
 
 const rsetPassword = async (req, res) => {
     try {
-        const { newPassword } = req.body; // Le nouveau mot de passe depuis le corps de la requête
-        const { token } = req.params; // Token depuis les paramètres de l'URL
-
+        const { newPassword } = req.body; 
+        const { token } = req.params; 
         // Vérifier et décoder le token JWT
         const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
         if (!tokenDecoded) {

@@ -13,14 +13,11 @@ const forgetPassword = async (req, res) => {
             return res.status(404).send('User not found');
         }
         // generate a token with short time
-        const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '3m' });            
+        const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '5m' });            
         await sendVerificationEmail(user.email, token,"forgetPassword"); // Send the token to the user's email
-        // await sendOtpEmail(user.email, token,forgetPassword); // Send the token to the user's email
 
-        // Notify user to check their email for get the token
         return res.status(200).json({
             message: 'token sent to your email. Please verify.',
-            // accessToken can be included if applicable, otherwise omit it
         });
     } catch (error) {
         // Handle specific error messages if needed

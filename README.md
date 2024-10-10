@@ -44,7 +44,7 @@ This project implements the backend authentication system for alloMedia, a food 
 
 2. Install dependencies:
    ```
-   cd allomedia-backend-auth
+   cd allomedia
    npm install
    ```
 
@@ -103,7 +103,7 @@ function generateToken(user) {
 Our 2FA system works as follows:
 
 1. After successful password verification, a 6-digit OTP is generated.
-2. The OTP is sent to the user via email or SMS.
+2. The OTP is sent to the user via email .
 3. The user must provide this OTP to complete the login process.
 4. Upon OTP verification, a JWT is issued for subsequent requests.
 
@@ -116,8 +116,6 @@ User Model:
   name: String,
   email: String,
   password: String,
-  phoneNumber: String,
-  address: String,
   role: String,
   isVerified: Boolean,
   verificationToken: String,
@@ -136,7 +134,6 @@ npm test
 
 Our test suite includes:
 - Unit tests for authentication functions
-- Integration tests for API endpoints
 - JWT verification tests
 
 ## Security Measures
@@ -144,8 +141,6 @@ Our test suite includes:
 - Passwords are hashed using bcryptjs
 - JWT secrets are stored as environment variables
 - Input validation to prevent injection attacks
-- Rate limiting on authentication endpoints
-- HTTPS enforcement in production
 
 ## Error Handling
 
@@ -157,10 +152,3 @@ We use a centralized error handling middleware. Common error responses include:
 - 404 Not Found: Resource not found
 - 500 Internal Server Error: Server-side issues
 
-## Deployment
-
-For deployment instructions, please refer to our [Deployment Guide](link-to-deployment-guide).
-
----
-
-For more detailed information or if you encounter any issues, please refer to our [Full Documentation](ckeckmyporfolio) or open an issue on this repository.

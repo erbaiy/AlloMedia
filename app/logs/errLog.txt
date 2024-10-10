@@ -5,3 +5,11 @@
 20240930	11:48:28	19739036-de8c-4ad1-a973-9f80c4f0f04a	Error: Cannot set headers after they are sent to the client
 20240930	17:22:26	09b04378-f940-4595-9796-d1e7850822cd	SyntaxError: Unexpected token ' ', "
 #" is not valid JSON
+20241003	16:20:33	a25f76f7-e198-42b7-82e3-fac8daeb9d07	Error: Not allowed by CORS
+20241003	16:24:30	912bcbf3-0a81-48f9-8940-e793f65ab444	Error: Not allowed by CORS
+20241003	16:26:50	9c8d8d2a-61ab-4185-a448-c1d3a8a46b3a	Error: Not allowed by CORS
+20241003	16:33:58	dca06ada-0c9b-4585-b2d3-0bc96135cf23	Error: Not allowed by CORS
+20241003	16:38:33	490c8aa3-b430-4550-b384-91a144aae071	Error: Not allowed by CORS
+20241003	16:40:50	033f44e9-c252-4ed8-8ec4-08b0c2b40fa4	Error: Not allowed by CORS
+20241003	16:42:43	c323c0b5-a9ab-437c-80dc-7e79a5641bbe	Error: Not allowed by CORS
+20241003	16:43:07	6cfba8e0-8c5d-41bb-afef-8ec47b063e71	Error: Not allowed by CORS

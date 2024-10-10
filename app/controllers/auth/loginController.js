@@ -62,23 +62,41 @@ const verifyOtp = async (req, res) => {
         const accessToken = jwt.sign(
             { username: user.username, userId: user._id, roles: user.roles },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '15s' }
+            { expiresIn: '60s' }
         );
 
-        // Generate new refresh token
-        const refreshToken = jwt.sign(
-            { userId: user._id },
+
+           // Generate new refresh token
+           const refreshToken = jwt.sign(
+            { username: user.username, userId: user._id },
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '7d' }
         );
 
+        // // Generate new refresh token
+        // const refreshToken = jwt.sign(
+        //     { userId: user._id },
+        //     process.env.REFRESH_TOKEN_SECRET,
+        //     { expiresIn: '7d' }
+        // );
+
         // Save the refresh token in a secure, HTTP-only cookie
+        // res.cookie('jwt', refreshToken, {
+        //     httpOnly: true,
+        //     secure: false, // Must be false for HTTP
+        //     sameSite: 'lax', // Allows cookies to be sent with top-level navigations
+        //     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        // });
+
+
         res.cookie('jwt', refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Ensure security in production
-            sameSite: 'None', // For cross-origin requests
-            maxAge: 24 * 60 * 60 * 1000 // 1 day
+            httpOnly: true, // Empêche l'accès côté client via JavaScript
+            secure: false, // Doit être 'true' en production (HTTPS)
+            sameSite: 'lax', // 'lax' pour le développement, 'none' pour la production avec HTTPS
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours en millisecondes
+            path: '/', // Assure que le cookie est accessible sur toutes les routes
         });
+        
 
         // Send access token and user info in the response
         return res.status(200).json({

@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
-const corsOptions = require('./app/config/corsOptions');
 const { logger } = require('./app/middleware/logEvents');
 const errorHandler = require('./app/middleware/errorHandler');
 const verifyJWT = require('./app/middleware/verifyJWT');
@@ -10,6 +9,15 @@ const cookieParser = require('cookie-parser');
 const credentials = require('./app/middleware/credentials');
 const connectDB=require('./db/dbconnect')
 const PORT = process.env.PORT || 3500;
+
+const corsOptions = {
+    origin: 'http://localhost:5173', // Correction de 'orgin' à 'origin'
+    credentials: true,
+    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    methods: 'GET, POST, PUT, DELETE, OPTIONS',
+    optionsSuccessStatus: 200
+}
+
 
 
 
@@ -50,6 +58,7 @@ app.use(verifyJWT);
 app.get('/home', (req, res) => {
     res.send('Home page');
 }); 
+
 
 app.all('*', (req, res) => {
     res.status(404);

@@ -53,7 +53,6 @@ module.exports = verifyEmail;
 
 
 
-
 // // verificationController.js
 // const User = require('../model/userModel');
 // const jwt = require('jsonwebtoken');

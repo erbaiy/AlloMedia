@@ -23,7 +23,7 @@ const sendVerificationEmail = async (email, tokenOrOtp, type) => {
   switch (type) {
     case "forgetPassword":
       subject = 'Password Reset';
-      text = ` xxxxddddee Please reset your password by clicking this link: ${process.env.FRONTEND_URL}/auth/reset-password?token=${tokenOrOtp}`;
+      text = `Hello, Please reset your password by clicking this link: ${process.env.FRONTEND_URL}/auth/reset-password/${tokenOrOtp}`;
       break;
       
     case "loginOtp":
@@ -33,7 +33,7 @@ const sendVerificationEmail = async (email, tokenOrOtp, type) => {
 
     case "verifyEmail":
       subject = 'Email Verification';
-      text = `Please verify your email by clicking this link: ${process.env.FRONTEND_URL}/register/verify-email?token=${tokenOrOtp}`;
+      text = `Please verify your email by clicking this link: ${process.env.FRONTEND_URL}/register/verify-email/${tokenOrOtp}`;
       break;
 
     default:
